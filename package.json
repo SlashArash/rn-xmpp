@@ -11,17 +11,35 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@expo/samples": "2.1.1",
     "expo": "^32.0.0",
     "expokit": "32.0.7",
+    "formik": "^1.5.1",
+    "immer": "^2.1.0",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-xmpp": "^1.0.3",
-    "react-navigation": "^3.0.9"
+    "react-navigation": "^3.0.9",
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.1"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.3.4",
+    "@types/expo": "^32.0.3",
+    "@types/expo__vector-icons": "^9.0.1",
+    "@types/node": "^11.11.3",
+    "@types/react": "^16.8.5",
+    "@types/react-native": "^0.57.38",
+    "@types/react-navigation": "^3.0.4",
+    "@types/react-redux": "^7.0.3",
+    "@typescript-eslint/eslint-plugin": "^1.4.2",
+    "@typescript-eslint/parser": "^1.4.2",
     "babel-preset-expo": "^5.0.0",
-    "jest-expo": "^32.0.0"
+    "babel-preset-typescript": "^7.0.0-alpha.19",
+    "eslint": "^5.14.1",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "jest-expo": "^32.0.0",
+    "prettier": "^1.16.4"
   },
   "private": true
 }
