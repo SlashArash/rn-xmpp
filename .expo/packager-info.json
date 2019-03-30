@@ -1,9 +1,10 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": 19003,
-  "packagerPid": 29670,
+  "packagerPort": 19001,
+  "packagerPid": 32608,
   "expoServerNgrokUrl": "https://7d-but.slasharash.rn-xmpp.exp.direct",
   "packagerNgrokUrl": "https://packager.7d-but.slasharash.rn-xmpp.exp.direct",
-  "ngrokPid": 29722
+  "ngrokPid": 32661,
+  "webpackServerPort": null
 }

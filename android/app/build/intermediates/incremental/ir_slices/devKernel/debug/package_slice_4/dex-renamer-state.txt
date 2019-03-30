@@ -1,4 +1,4 @@
-#Thu Mar 28 17:04:18 IRDT 2019
+#Sat Mar 30 10:30:36 IRDT 2019
 base.0=/home/arash/Projects/rn-xmpp/android/app/build/intermediates/transforms/dexMerger/devKernel/debug/4
 path.0=classes.dex
 renamed.0=classes.dex

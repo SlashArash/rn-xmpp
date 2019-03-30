@@ -415,5 +415,6 @@
     <orderEntry type="library" name="Gradle: org.igniterealtime.smack:smack-tcp:4.1.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tasks:16.0.1@aar" level="project" />
     <orderEntry type="module" module-name="react-native-xmpp" />
+    <orderEntry type="module" module-name="react-native-xmpp" />
   </component>
 </module>
