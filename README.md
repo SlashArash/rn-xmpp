@@ -1,0 +1,1 @@
+# smart home application for android and ios
