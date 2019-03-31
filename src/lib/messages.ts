@@ -2,7 +2,7 @@ export default {
   activeSensors: 'دستگاه‌های فعال',
   device: 'دستگاه',
   home: 'خانه',
-  ip: 'آی‌پی سرور',
+  ipOfLocalServer: 'آی‌پی سرور محلی',
   normal: 'عادی',
   password: 'گذرواژه',
   reception: 'پذیرایی',

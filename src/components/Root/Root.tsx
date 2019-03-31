@@ -4,7 +4,7 @@ import { AppLoading } from 'expo';
 import { Feather } from '@expo/vector-icons';
 
 import AppNavigator from '../../navigation/AppNavigator';
-import { cacheFonts, cacheImages } from '../../utilites/caching';
+import { cacheFonts, cacheImages } from '../../lib/caching';
 
 interface IComponentStates {
   isReady: boolean;

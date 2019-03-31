@@ -17,10 +17,13 @@
     "immer": "^2.1.0",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-xml2js": "^1.0.3",
     "react-native-xmpp": "^1.0.3",
     "react-navigation": "^3.0.9",
     "react-redux": "^6.0.1",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "xml-js": "^1.6.11",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.3.4",
@@ -31,6 +34,7 @@
     "@types/react-native": "^0.57.38",
     "@types/react-navigation": "^3.0.4",
     "@types/react-redux": "^7.0.3",
+    "@types/xml2js": "^0.4.3",
     "@typescript-eslint/eslint-plugin": "^1.4.2",
     "@typescript-eslint/parser": "^1.4.2",
     "babel-preset-expo": "^5.0.0",

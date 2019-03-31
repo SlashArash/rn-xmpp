@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Alert, AsyncStorage, View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { Formik } from 'formik';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { NavigationRoute, NavigationScreenProp } from 'react-navigation';
@@ -8,6 +8,7 @@ import IStore from '../../types/IStore';
 import { login, logout } from '../../store/auth/actions';
 
 import messages from '../../lib/messages';
+import xmlToJson from "../../lib/xmlToJson";
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
@@ -53,16 +54,24 @@ class SignIn extends PureComponent<IComponentProps> {
     title: 'please sign in',
   };
   handleSubmit = async (values: ILoginFormProps) => {
-    if (values.user.length > 0) {
-      await AsyncStorage.setItem('userToken', values.user);
-      this.props.navigation.navigate('App');
+    const { user, password } = values;
+    if (user.trim() !== '' && password.trim() !== '') {
+      const XMPP = (global as any).XMPP;
+      XMPP.trustHosts(['jabb.im']);
+      XMPP.connect(`${user}@jabb.im`, password);
+      XMPP.on('error', (message) => {
+        console.debug('ERROR:' + message);
+      });
+      XMPP.on('connect', () => console.debug('CONNECTED!'));
+      XMPP.on('login', () => {
+        this.props.navigation.navigate('App');
+      });
+      XMPP.on('loginError', (message) =>
+        console.debug(xmlToJson(message))
+      );
     } else {
       Alert.alert('Alert', 'please enter valid user name');
     }
-  };
-
-  log = (text) => {
-
   };
 
   render() {
@@ -76,7 +85,6 @@ class SignIn extends PureComponent<IComponentProps> {
               value={props.values.server}
               placeholder={messages.serverName}
             />
-
             <Input
               onChangeText={props.handleChange('user')}
               onBlur={props.handleBlur('user')}
@@ -95,7 +103,7 @@ class SignIn extends PureComponent<IComponentProps> {
               onChangeText={props.handleChange('ip')}
               onBlur={props.handleBlur('ip')}
               value={props.values.ip}
-              placeholder={messages.ip}
+              placeholder={messages.ipOfLocalServer}
             />
             <Button
               onPress={props.handleSubmit}
