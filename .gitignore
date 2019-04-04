@@ -1,4 +1,12 @@
+build/
+
+# Android/IJ
+#
+.idea
+.gradle
+local.properties
+
+# node.js
+#
 node_modules/
-.idea/
-npm-debug.*
-.gradle/
+npm-debug.log
