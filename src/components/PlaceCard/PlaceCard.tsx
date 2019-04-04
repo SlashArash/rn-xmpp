@@ -1,7 +1,7 @@
 import React, { StatelessComponent } from 'react';
 import { Image, TouchableHighlight, View } from 'react-native';
 
-import IRoom from '../../types/IRoom';
+import IPlace from '../../types/IPlace';
 
 import styles from './styles';
 import { colors } from '../../constants/Theme';
@@ -9,34 +9,34 @@ import messages from '../../lib/messages';
 import StyledText from '../StyledText';
 
 interface IComponentProps {
-  room: IRoom;
+  place: IPlace;
 }
 
-const requireIcon = (room: IRoom) => {
+const requireIcon = (place: IPlace) => {
   let icon = require(`../../../assets/images/icons/unknown-dark.png`);
 
-  if (room.type === 'bath') {
+  if (place.iconNumber === '1') {
     icon = require(`../../../assets/images/icons/bath-dark.png`);
-  } else if (room.type === 'bedRoom') {
+  } else if (place.iconNumber === '2') {
     icon = require(`../../../assets/images/icons/bed-dark.png`);
-  } else if (room.type === 'kitchen') {
+  } else if (place.iconNumber === '3') {
     icon = require(`../../../assets/images/icons/washing-dark.png`);
-  } else if (room.type === 'saloon') {
+  } else if (place.iconNumber === '4') {
     icon = require(`../../../assets/images/icons/tv-dark.png`);
   }
   return icon;
 };
 
-const RoomCard: StatelessComponent<IComponentProps> = ({ room }) => {
-  const icon = requireIcon(room);
+const PlaceCard: StatelessComponent<IComponentProps> = ({ place }) => {
+  const icon = requireIcon(place);
   return (
     <TouchableHighlight style={styles.card}>
       <View style={styles.cardBody}>
         <Image source={icon} style={styles.icon} />
         <View>
-          <StyledText>{messages.roomType(room.type)}</StyledText>
+          <StyledText>{place.name}</StyledText>
           <StyledText style={{ color: colors.smoke, fontSize: 10 }}>
-            {room.devices.length > 0 ? room.devices.length : messages.without}{' '}
+            {place.devices.length > 0 ? place.devices.length : messages.without}{' '}
             {messages.device}
           </StyledText>
         </View>
@@ -45,4 +45,4 @@ const RoomCard: StatelessComponent<IComponentProps> = ({ room }) => {
   );
 };
 
-export default RoomCard;
+export default PlaceCard;

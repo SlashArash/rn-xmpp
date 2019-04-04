@@ -15,6 +15,10 @@ class Root extends React.Component<any, IComponentStates> {
     isReady: false,
   };
 
+  constructor(props) {
+    super(props);
+  }
+
   loadResourcesAsync = async () => {
     const imageAssets = cacheImages([
       require('../../../assets/images/robot-dev.png'),

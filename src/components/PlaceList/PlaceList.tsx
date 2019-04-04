@@ -1,17 +1,17 @@
 import React, { StatelessComponent } from 'react';
 import { View } from 'react-native';
 
-import IRooms from '../../types/IRooms';
+import IPlaces from '../../types/IPlaces';
 
 import messages from '../../lib/messages';
 import ListTitle from '../ListTitle';
-import RoomCard from '../RoomCard';
+import PlaceCard from '../PlaceCard';
 
 interface IComponentProps {
-  rooms: IRooms;
+  places: IPlaces;
 }
 
-const RoomList: StatelessComponent<IComponentProps> = ({ rooms }) => (
+const PlaceList: StatelessComponent<IComponentProps> = ({ places }) => (
   <View>
     <ListTitle>{messages.rooms}</ListTitle>
     <View
@@ -20,11 +20,11 @@ const RoomList: StatelessComponent<IComponentProps> = ({ rooms }) => (
         flexWrap: 'wrap',
       }}
     >
-      {Object.values(rooms).map((room) => (
-        <RoomCard key={room.id} room={room} />
+      {Object.values(places).map((place) => (
+        <PlaceCard key={place.name} place={place} />
       ))}
     </View>
   </View>
 );
 
-export default RoomList;
+export default PlaceList;

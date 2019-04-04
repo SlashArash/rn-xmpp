@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
 import { Alert, View } from 'react-native';
 import { Formik } from 'formik';
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { connect, MapStateToProps } from 'react-redux';
 import { NavigationRoute, NavigationScreenProp } from 'react-navigation';
+import { Dispatch } from 'redux';
 
 import IStore from '../../types/IStore';
-import { login, logout } from '../../store/auth/actions';
+import { login } from '../../store/auth/actions';
 
 import messages from '../../lib/messages';
 import { xmpp } from '../../lib/XMPP';
@@ -15,6 +16,7 @@ import Button from '../../components/Button';
 interface IOwnProps {
   onSubmit: (values: ILoginFormProps) => void;
   navigation: NavigationScreenProp<NavigationRoute>;
+  dispatch: Dispatch;
 }
 
 interface IStateToProps {
@@ -23,17 +25,7 @@ interface IStateToProps {
   ip: string | null;
 }
 
-interface IDispatchToProps {
-  login: (
-    ip: string,
-    password: string,
-    serverName: string,
-    userName: string
-  ) => void;
-  logout: (userName: string) => void;
-}
-
-type IComponentProps = IOwnProps & IStateToProps & IDispatchToProps;
+type IComponentProps = IOwnProps & IStateToProps;
 
 interface ILoginFormProps {
   server: string;
@@ -43,9 +35,9 @@ interface ILoginFormProps {
 }
 
 const loginInitialValues: ILoginFormProps = {
-  server: '',
-  user: '',
-  password: '',
+  server: 'iseecoserver6',
+  user: 'iseeco61',
+  password: '123456',
   ip: '',
 };
 
@@ -62,9 +54,9 @@ class SignIn extends PureComponent<IComponentProps> {
       xmpp.user = user.toLowerCase();
 
       xmpp.login((ip, pass, server, user) => {
-        this.props.login(ip, pass, server, user);
+        this.props.dispatch(login(ip, pass, server, user));
         this.props.navigation.navigate('App');
-      });
+      }, this.props.dispatch);
     } else {
       Alert.alert('Alert', 'Please enter valid credential');
     }
@@ -125,23 +117,6 @@ const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IStore> = (
   return { ip, serverName, userName };
 };
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (
-  dispatch
-) => ({
-  login: (
-    ip: string,
-    password: string,
-    serverName: string,
-    userName: string
-  ) => {
-    dispatch(login(ip, password, serverName, userName));
-  },
-  logout: (userName: string) => {
-    dispatch(logout(userName));
-  },
-});
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
 )(SignIn);

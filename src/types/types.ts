@@ -5,3 +5,5 @@ export const enum dataStatus {
 }
 
 export type colorTypes = 'black' | 'blue' | 'smoke' | 'purple';
+
+export type deviceType = '1' | '2' | '3';

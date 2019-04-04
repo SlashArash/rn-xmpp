@@ -6,13 +6,13 @@ import { connect, MapStateToProps } from 'react-redux';
 
 import { xmpp } from '../../lib/XMPP';
 import IStatuses from '../../types/IStatuses';
-import IRooms from '../../types/IRooms';
 import IStore from '../../types/IStore';
+import IPlaces from '../../types/IPlaces';
 
 import styles from './styles';
 import StatusBox from '../../components/StatusBox';
 import StatusList from '../../components/StatusList';
-import RoomList from '../../components/RoomList';
+import PlaceList from '../../components/PlaceList';
 import Wrapper from '../../components/Wrapper';
 import Button from '../../components/Button';
 
@@ -23,13 +23,14 @@ interface IOwnProps {
 interface IStateToProps {
   userName: string | null;
   serverName: string | null;
+  places: IPlaces;
 }
 
 type IComponentProps = IOwnProps & IStateToProps;
 
 interface IComponentStates {
   statuses: IStatuses;
-  rooms: IRooms;
+  rooms: IPlaces;
 }
 
 class HomeScreen extends React.Component<IComponentProps, IComponentStates> {
@@ -48,7 +49,6 @@ class HomeScreen extends React.Component<IComponentProps, IComponentStates> {
       }&00:00:00&0&&client`
     );
     this.requireStatuses();
-    this.requireRooms();
   };
 
   requireStatuses = () => {
@@ -59,25 +59,6 @@ class HomeScreen extends React.Component<IComponentProps, IComponentStates> {
       4: { id: 4, title: 'travel', active: false },
     };
     this.setState({ statuses });
-  };
-
-  requireRooms = () => {
-    const rooms: IRooms = {
-      1: { id: 1, type: 'bedRoom', devices: [{ title: 'socket' }] },
-      2: { id: 2, type: 'kitchen', devices: [] },
-      3: { id: 3, type: 'saloon', devices: [{ title: 'plug' }] },
-      4: {
-        id: 4,
-        type: 'bedRoom',
-        devices: [{ title: 'plug' }, { title: 'socket' }, { title: 'socket' }],
-      },
-      5: {
-        id: 5,
-        type: 'bath',
-        devices: [{ title: 'plug' }, { title: 'thermometer' }],
-      },
-    };
-    this.setState({ rooms });
   };
 
   handleSelectStatus = (statusId: number) => () => {
@@ -105,7 +86,7 @@ class HomeScreen extends React.Component<IComponentProps, IComponentStates> {
             <Button onPress={this.sendMessage} title="send message" />
             {this.props.userName && <Text>{this.props.userName}</Text>}
             {this.props.serverName && <Text>{this.props.serverName}</Text>}
-            <RoomList rooms={this.state.rooms} />
+            <PlaceList places={this.props.places} />
             <Text style={styles.getStartedText}>Rastech Co.</Text>
           </View>
         </ScrollView>
@@ -119,8 +100,9 @@ const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IStore> = (
 ) => {
   const userName = state.auth.userName;
   const serverName = state.auth.serverName;
+  const places = state.places;
 
-  return { userName, serverName };
+  return { userName, serverName, places };
 };
 
 export default connect(mapStateToProps)(HomeScreen);
