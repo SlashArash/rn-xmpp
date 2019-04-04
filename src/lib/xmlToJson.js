@@ -1,4 +1,4 @@
-const xmlToJson = (xml) => {
+const xmlToJson = (xml: Document) => {
   // Create the return object
   let obj = {};
 

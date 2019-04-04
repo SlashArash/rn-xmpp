@@ -8,7 +8,7 @@ import IStore from '../../types/IStore';
 import { login, logout } from '../../store/auth/actions';
 
 import messages from '../../lib/messages';
-import xmlToJson from "../../lib/xmlToJson";
+import { xmpp } from '../../lib/XMPP';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
@@ -51,26 +51,22 @@ const loginInitialValues: ILoginFormProps = {
 
 class SignIn extends PureComponent<IComponentProps> {
   static navigationOptions = {
-    title: 'please sign in',
+    title: 'Please sign in',
   };
   handleSubmit = async (values: ILoginFormProps) => {
-    const { user, password } = values;
+    const { user, password, ip, server } = values;
     if (user.trim() !== '' && password.trim() !== '') {
-      const XMPP = (global as any).XMPP;
-      XMPP.trustHosts(['jabb.im']);
-      XMPP.connect(`${user}@jabb.im`, password);
-      XMPP.on('error', (message) => {
-        console.debug('ERROR:' + message);
-      });
-      XMPP.on('connect', () => console.debug('CONNECTED!'));
-      XMPP.on('login', () => {
+      xmpp.ip = ip;
+      xmpp.password = password;
+      xmpp.server = server.toLowerCase();
+      xmpp.user = user.toLowerCase();
+
+      xmpp.login((ip, pass, server, user) => {
+        this.props.login(ip, pass, server, user);
         this.props.navigation.navigate('App');
       });
-      XMPP.on('loginError', (message) =>
-        console.debug(xmlToJson(message))
-      );
     } else {
-      Alert.alert('Alert', 'please enter valid user name');
+      Alert.alert('Alert', 'Please enter valid credential');
     }
   };
 
@@ -84,6 +80,7 @@ class SignIn extends PureComponent<IComponentProps> {
               onBlur={props.handleBlur('server')}
               value={props.values.server}
               placeholder={messages.serverName}
+              returnKeyType={'next'}
             />
             <Input
               onChangeText={props.handleChange('user')}
@@ -98,6 +95,7 @@ class SignIn extends PureComponent<IComponentProps> {
               value={props.values.password}
               placeholder={messages.password}
               returnKeyType={'next'}
+              secureTextEntry={true}
             />
             <Input
               onChangeText={props.handleChange('ip')}

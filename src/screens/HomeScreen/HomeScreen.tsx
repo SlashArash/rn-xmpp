@@ -4,6 +4,7 @@ import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import produce from 'immer';
 import { connect, MapStateToProps } from 'react-redux';
 
+import { xmpp } from '../../lib/XMPP';
 import IStatuses from '../../types/IStatuses';
 import IRooms from '../../types/IRooms';
 import IStore from '../../types/IStore';
@@ -13,6 +14,7 @@ import StatusBox from '../../components/StatusBox';
 import StatusList from '../../components/StatusList';
 import RoomList from '../../components/RoomList';
 import Wrapper from '../../components/Wrapper';
+import Button from '../../components/Button';
 
 interface IOwnProps {
   navigation: NavigationScreenProp<NavigationRoute>;
@@ -20,6 +22,7 @@ interface IOwnProps {
 
 interface IStateToProps {
   userName: string | null;
+  serverName: string | null;
 }
 
 type IComponentProps = IOwnProps & IStateToProps;
@@ -38,10 +41,15 @@ class HomeScreen extends React.Component<IComponentProps, IComponentStates> {
     rooms: {},
   };
 
-  componentDidMount(): void {
+  sendMessage = () => {
+    xmpp.message(
+      `client&${this.props.userName}&${
+        this.props.serverName
+      }&00:00:00&0&&client`
+    );
     this.requireStatuses();
     this.requireRooms();
-  }
+  };
 
   requireStatuses = () => {
     const statuses: IStatuses = {
@@ -94,7 +102,9 @@ class HomeScreen extends React.Component<IComponentProps, IComponentStates> {
               statuses={this.state.statuses}
               onPress={this.handleSelectStatus}
             />
+            <Button onPress={this.sendMessage} title="send message" />
             {this.props.userName && <Text>{this.props.userName}</Text>}
+            {this.props.serverName && <Text>{this.props.serverName}</Text>}
             <RoomList rooms={this.state.rooms} />
             <Text style={styles.getStartedText}>Rastech Co.</Text>
           </View>
@@ -108,8 +118,9 @@ const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IStore> = (
   state
 ) => {
   const userName = state.auth.userName;
+  const serverName = state.auth.serverName;
 
-  return { userName };
+  return { userName, serverName };
 };
 
 export default connect(mapStateToProps)(HomeScreen);
