@@ -10,6 +10,7 @@ import StyledText from '../StyledText';
 
 interface IComponentProps {
   place: IPlace;
+  onPress: () => void;
 }
 
 const requireIcon = (place: IPlace) => {
@@ -27,10 +28,10 @@ const requireIcon = (place: IPlace) => {
   return icon;
 };
 
-const PlaceCard: StatelessComponent<IComponentProps> = ({ place }) => {
+const PlaceCard: StatelessComponent<IComponentProps> = ({ place, onPress }) => {
   const icon = requireIcon(place);
   return (
-    <TouchableHighlight style={styles.card}>
+    <TouchableHighlight style={styles.card} onPress={onPress}>
       <View style={styles.cardBody}>
         <Image source={icon} style={styles.icon} />
         <View>

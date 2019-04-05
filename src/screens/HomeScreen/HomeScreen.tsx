@@ -14,7 +14,6 @@ import StatusBox from '../../components/StatusBox';
 import StatusList from '../../components/StatusList';
 import PlaceList from '../../components/PlaceList';
 import Wrapper from '../../components/Wrapper';
-import Button from '../../components/Button';
 
 interface IOwnProps {
   navigation: NavigationScreenProp<NavigationRoute>;
@@ -42,14 +41,10 @@ class HomeScreen extends React.Component<IComponentProps, IComponentStates> {
     rooms: {},
   };
 
-  sendMessage = () => {
-    xmpp.message(
-      `client&${this.props.userName}&${
-        this.props.serverName
-      }&00:00:00&0&&client`
-    );
+  componentDidMount() {
+    this.requirePlaces();
     this.requireStatuses();
-  };
+  }
 
   requireStatuses = () => {
     const statuses: IStatuses = {
@@ -59,6 +54,14 @@ class HomeScreen extends React.Component<IComponentProps, IComponentStates> {
       4: { id: 4, title: 'travel', active: false },
     };
     this.setState({ statuses });
+  };
+
+  requirePlaces = () => {
+    xmpp.message(
+      `client&${this.props.userName}&${
+        this.props.serverName
+      }&00:00:00&0&&client`
+    );
   };
 
   handleSelectStatus = (statusId: number) => () => {
@@ -73,6 +76,10 @@ class HomeScreen extends React.Component<IComponentProps, IComponentStates> {
     });
   };
 
+  handlePressOnAPlace = (placeId: string) => () => {
+    this.props.navigation.navigate('Place', { placeId });
+  };
+
   render() {
     return (
       <Wrapper>
@@ -83,10 +90,10 @@ class HomeScreen extends React.Component<IComponentProps, IComponentStates> {
               statuses={this.state.statuses}
               onPress={this.handleSelectStatus}
             />
-            <Button onPress={this.sendMessage} title="send message" />
-            {this.props.userName && <Text>{this.props.userName}</Text>}
-            {this.props.serverName && <Text>{this.props.serverName}</Text>}
-            <PlaceList places={this.props.places} />
+            <PlaceList
+              places={this.props.places}
+              onPressOnAPlace={this.handlePressOnAPlace}
+            />
             <Text style={styles.getStartedText}>Rastech Co.</Text>
           </View>
         </ScrollView>

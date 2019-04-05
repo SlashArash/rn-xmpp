@@ -9,9 +9,13 @@ import PlaceCard from '../PlaceCard';
 
 interface IComponentProps {
   places: IPlaces;
+  onPressOnAPlace: (placeId: string) => () => void;
 }
 
-const PlaceList: StatelessComponent<IComponentProps> = ({ places }) => (
+const PlaceList: StatelessComponent<IComponentProps> = ({
+  places,
+  onPressOnAPlace,
+}) => (
   <View>
     <ListTitle>{messages.rooms}</ListTitle>
     <View
@@ -21,7 +25,11 @@ const PlaceList: StatelessComponent<IComponentProps> = ({ places }) => (
       }}
     >
       {Object.values(places).map((place) => (
-        <PlaceCard key={place.name} place={place} />
+        <PlaceCard
+          key={place.name}
+          place={place}
+          onPress={onPressOnAPlace(place.name)}
+        />
       ))}
     </View>
   </View>

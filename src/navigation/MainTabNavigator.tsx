@@ -8,10 +8,25 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import SignInScreen from '../screens/SignInScreen';
+import PlaceScreen from '../screens/PlaceScreen';
+import { colors } from '../constants/Theme';
 
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
-});
+const HomeStack = createStackNavigator(
+  {
+    Home: HomeScreen,
+    Place: PlaceScreen,
+  },
+  {
+    initialRouteName: 'Home',
+    defaultNavigationOptions: {
+      headerTintColor: colors.blue,
+      headerTitleStyle: {
+        textAlign: 'center',
+        alignSelf: 'center',
+      },
+    },
+  }
+);
 
 HomeStack.navigationOptions = {
   tabBarOptions: {
