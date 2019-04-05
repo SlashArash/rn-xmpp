@@ -1,35 +1,24 @@
 import React from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import { connect, MapStateToProps } from 'react-redux';
 
-import IStatuses from '../../types/IStatuses';
 import IStore from '../../types/IStore';
-import IPlaces from '../../types/IPlaces';
+import IPlace from '../../types/IPlace';
 
-import { baseFont } from '../../constants/Theme';
+import DeviceList from '../../components/DeviceList';
 
 interface IOwnProps {
   navigation: NavigationScreenProp<NavigationRoute>;
 }
 
 interface IStateToProps {
-  userName: string | null;
-  serverName: string | null;
-  places: IPlaces;
+  place: IPlace;
 }
 
 type IComponentProps = IOwnProps & IStateToProps;
 
-interface IComponentStates {
-  statuses: IStatuses;
-  rooms: IPlaces;
-}
-
-class PlaceScreen extends React.PureComponent<
-  IComponentProps,
-  IComponentStates
-> {
+class PlaceScreen extends React.PureComponent<IComponentProps> {
   static navigationOptions = ({ navigation }) => {
     return {
       title: navigation.getParam('placeId', 'Place Screen'),
@@ -37,24 +26,25 @@ class PlaceScreen extends React.PureComponent<
   };
 
   render() {
+    const devices = this.props.place ? this.props.place.devices : [];
+
     return (
       <ScrollView>
-        <View>
-          <Text>Rastech Co.</Text>
-        </View>
+        <DeviceList devices={devices} />
       </ScrollView>
     );
   }
 }
 
 const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IStore> = (
-  state
+  state,
+  props
 ) => {
-  const userName = state.auth.userName;
-  const serverName = state.auth.serverName;
-  const places = state.places;
+  const placeId = props.navigation.getParam('placeId');
 
-  return { userName, serverName, places };
+  const place = state.places[placeId];
+
+  return { place };
 };
 
 export default connect(mapStateToProps)(PlaceScreen);

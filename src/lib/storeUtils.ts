@@ -42,6 +42,7 @@ const normalizeDevices = (serverDevices: IServerDevice[]): IDevice[] => {
         name: serverDevice['@attributes'].name,
         type: serverDevice['@attributes'].type,
         status: serverDevice['@attributes'].status,
+        active: false,
       };
       devices.push(device);
       return devices;

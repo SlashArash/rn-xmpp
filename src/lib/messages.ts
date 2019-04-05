@@ -30,4 +30,5 @@ export default {
   travel: 'سفر',
   userName: 'نام کاربری',
   without: 'بدون',
+  devices: 'وسائل',
 };
