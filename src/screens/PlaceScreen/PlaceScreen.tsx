@@ -37,6 +37,10 @@ class PlaceScreen extends React.PureComponent<IComponentProps> {
     });
   }
 
+  handleChangeDeviceState = (device: IDevice) => () => {
+    xmpp.updateDeviceStatus(device);
+  };
+
   render() {
     const devicesId = this.props.place ? this.props.place.devices : [];
     const devices = devicesId.reduce((list: IDevice[], deviceId: string) => {
@@ -48,7 +52,10 @@ class PlaceScreen extends React.PureComponent<IComponentProps> {
     }, []);
     return (
       <ScrollView>
-        <DeviceList devices={devices} />
+        <DeviceList
+          devices={devices}
+          onChangeDeviceState={this.handleChangeDeviceState}
+        />
       </ScrollView>
     );
   }

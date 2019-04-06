@@ -9,9 +9,13 @@ import DeviceCard from '../DeviceCard';
 
 interface IComponentProps {
   devices: IDevice[];
+  onChangeDeviceState: (device: IDevice) => () => void;
 }
 
-const DeviceList: StatelessComponent<IComponentProps> = ({ devices }) => (
+const DeviceList: StatelessComponent<IComponentProps> = ({
+  devices,
+  onChangeDeviceState,
+}) => (
   <View>
     <ListTitle>{messages.devices}</ListTitle>
     <View
@@ -21,7 +25,11 @@ const DeviceList: StatelessComponent<IComponentProps> = ({ devices }) => (
       }}
     >
       {devices.map((device) => (
-        <DeviceCard key={`${device.number}+${device.name}`} device={device} />
+        <DeviceCard
+          key={`${device.number}+${device.name}`}
+          device={device}
+          onChangeDeviceState={onChangeDeviceState}
+        />
       ))}
     </View>
   </View>

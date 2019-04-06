@@ -1,12 +1,15 @@
 import XMPP from 'react-native-xmpp';
 import { Dispatch } from 'redux';
 
-import getXmlMessage from './getXmlMessage';
-import xmlToJson from './xmlToJson';
-import { addPlaces } from '../store/places/actions';
-import { normalizePlaces } from './storeUtils';
+import IDevice from '../types/IDevice';
 import { updateTime } from '../store/app/actions';
 import { updateDevice } from '../store/devices/actions';
+import { addPlaces } from '../store/places/actions';
+import getXmlMessage from './getXmlMessage';
+import xmlToJson from './xmlToJson';
+import { normalizePlaces } from './storeUtils';
+import mapDeviceType from './mapDeviceType';
+import { changeLampState } from './deviceUtils';
 
 interface IXMPP {
   ip: string | null;
@@ -21,6 +24,7 @@ interface IXMPP {
   getPlaces: () => void;
   getDeviceStatus: (deviceNumber: string) => void;
   packMessage: (message: string, type: string) => string;
+  updateDeviceStatus: (device: IDevice) => void;
 }
 
 XMPP.trustHosts(['jabb.im']);
@@ -60,7 +64,8 @@ export const xmpp: IXMPP = {
           const statusA = Number(msgParts[3]);
           const statusB = Number(msgParts[4]);
           dispatch(updateDevice(deviceNumber, statusA, statusB));
-          console.debug('message type 2', msg);
+
+          console.debug(msg);
         }
       }
     });
@@ -87,5 +92,20 @@ export const xmpp: IXMPP = {
     return `client&${xmpp.user}&${xmpp.server}&${
       xmpp.lastUpdateTime
     }&${type}&${message}&client`;
+  },
+  updateDeviceStatus: (device: IDevice) => {
+    const deviceType = mapDeviceType(device.type);
+    let message;
+    if (deviceType === 'lamp') {
+      const msg = changeLampState(device);
+      message = xmpp.packMessage(msg, '2');
+    } else if (deviceType === 'thermostat') {
+      console.debug('change thermostat state');
+    } else if (deviceType === 'curtain') {
+      console.debug('change curtain state');
+    }
+    if (message) {
+      xmpp.message(message);
+    }
   },
 };
