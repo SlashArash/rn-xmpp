@@ -5,6 +5,7 @@ import getXmlMessage from './getXmlMessage';
 import xmlToJson from './xmlToJson';
 import { addPlaces } from '../store/places/actions';
 import { normalizePlaces } from './storeUtils';
+import { updateTime } from '../store/app/actions';
 
 interface IXMPP {
   ip: string | null;
@@ -41,12 +42,14 @@ export const xmpp: IXMPP = {
       const parts = message.body.split('&');
       const msg = parts[5];
       const msgType = parts[4];
+      const lastUpdateTime = parts[3];
       if (parts.length === 7 || parts[0] === 'server') {
         if (msgType === '0') {
           const xml = getXmlMessage(msg);
           if (xml) {
             const json = xmlToJson(xml);
             dispatch(addPlaces(normalizePlaces(json.settings.places as any)));
+            dispatch(updateDate(lastUpdateTime));
           }
         } else if (msgType === '2') {
           console.debug('message type 2', msg);

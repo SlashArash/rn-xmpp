@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
-import AuthReducer from './auth/reducer';
+import AppReducer from './app/reducer';
 import PlacesReducer from './places/reducer';
 import DevicesReducer from './devices/reducer';
 
 export default combineReducers({
-  auth: AuthReducer,
+  app: AppReducer,
   places: PlacesReducer,
   devices: DevicesReducer,
 });

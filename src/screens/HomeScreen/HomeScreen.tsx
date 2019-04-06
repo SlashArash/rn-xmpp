@@ -101,8 +101,8 @@ class HomeScreen extends React.Component<IComponentProps, IComponentStates> {
 const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IStore> = (
   state
 ) => {
-  const userName = state.auth.userName;
-  const serverName = state.auth.serverName;
+  const userName = state.app.userName;
+  const serverName = state.app.serverName;
   const places = state.places;
 
   return { userName, serverName, places };

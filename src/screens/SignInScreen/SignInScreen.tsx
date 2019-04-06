@@ -6,7 +6,7 @@ import { NavigationRoute, NavigationScreenProp } from 'react-navigation';
 import { Dispatch } from 'redux';
 
 import IStore from '../../types/IStore';
-import { login } from '../../store/auth/actions';
+import { login } from '../../store/app/actions';
 
 import messages from '../../lib/messages';
 import { xmpp } from '../../lib/XMPP';
@@ -110,13 +110,11 @@ class SignIn extends PureComponent<IComponentProps> {
 const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IStore> = (
   state
 ) => {
-  const ip = state.auth.ip;
-  const serverName = state.auth.serverName;
-  const userName = state.auth.userName;
+  const ip = state.app.ip;
+  const serverName = state.app.serverName;
+  const userName = state.app.userName;
 
   return { ip, serverName, userName };
 };
 
-export default connect(
-  mapStateToProps,
-)(SignIn);
+export default connect(mapStateToProps)(SignIn);
