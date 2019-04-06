@@ -3,14 +3,11 @@ import { DOMParser } from 'xmldom';
 const parser = new DOMParser();
 
 const getXmlMessage = (msg: string): Document | undefined => {
-  const parts = msg.split('&');
-
-  if (parts.length != 7 || parts[0] != 'server' || !parts[5]) {
+  if (!msg) {
     return;
   }
 
-  const xmlText: string = parts[5];
-  const xml = parser.parseFromString(xmlText);
+  const xml = parser.parseFromString(msg);
   return xml;
 };
 

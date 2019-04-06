@@ -1,6 +1,7 @@
 import IPlaces from '../types/IPlaces';
 import { deviceType } from '../types/types';
 import IDevice from '../types/IDevice';
+import IDevices from '../types/IDevices';
 
 interface IServerDevice {
   '@attributes': {
@@ -22,20 +23,25 @@ interface IServerPlaces {
   place: IServerPlace[];
 }
 
-export const normalizePlaces = (serverPlaces: IServerPlaces): IPlaces => {
-  return serverPlaces.place.reduce((places: IPlaces, place: IServerPlace) => {
+export const normalizePlaces = (
+  serverPlaces: IServerPlaces
+): [IPlaces, IDevices] => {
+  const places: IPlaces = {};
+  let devices: IDevices = {};
+  serverPlaces.place.forEach((place: IServerPlace) => {
     places[place['@attributes'].name] = {
       iconNumber: place['@attributes'].iconnumber,
       name: place['@attributes'].name,
-      devices: normalizeDevices(place.placeitem),
+      devices: devicesName(place.placeitem),
     };
-    return places;
-  }, {});
+    devices = { ...devices, ...normalizeDevices(place.placeitem) };
+  });
+  return [places, devices];
 };
 
-const normalizeDevices = (serverDevices: IServerDevice[]): IDevice[] => {
+const normalizeDevices = (serverDevices: IServerDevice[]): IDevices => {
   return serverDevices.reduce(
-    (devices: IDevice[], serverDevice: IServerDevice) => {
+    (devices: IDevices, serverDevice: IServerDevice) => {
       const device: IDevice = {
         iconnumber: serverDevice['@attributes'].iconnumber,
         number: serverDevice['@attributes'].number,
@@ -44,9 +50,19 @@ const normalizeDevices = (serverDevices: IServerDevice[]): IDevice[] => {
         status: serverDevice['@attributes'].status,
         active: false,
       };
-      devices.push(device);
+      const deviceId = `${device.number}+${device.status}`;
+      devices[deviceId] = device;
       return devices;
     },
-    []
+    {}
+  );
+};
+
+const devicesName = (serverDevices: IServerDevice[]): string[] => {
+  return serverDevices.map(
+    (serverDevice: IServerDevice) =>
+      `${serverDevice['@attributes'].number}+${
+        serverDevice['@attributes'].status
+      }`
   );
 };

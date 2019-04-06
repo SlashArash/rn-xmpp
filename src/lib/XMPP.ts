@@ -15,6 +15,9 @@ interface IXMPP {
   login: (loginListener: any, dispatch: Dispatch) => void;
   message: (msg: string) => void;
   disconnect: () => void;
+  getPlaces: () => void;
+  getDeviceStatus: (deviceNumber: string) => void;
+  packMessage: (message: string, type: string) => string;
 }
 
 XMPP.trustHosts(['jabb.im']);
@@ -35,55 +38,43 @@ export const xmpp: IXMPP = {
     XMPP.on('login', () => loginListener(ip, password, server, user));
     XMPP.on('loginError', (message) => console.debug(message));
     XMPP.on('message', (message) => {
-      const xml = getXmlMessage(message.body);
-      if (xml) {
-        const json = xmlToJson(xml);
-        dispatch(addPlaces(normalizePlaces(json.settings.places as any)));
-        console.debug('rsv:' + JSON.stringify(json));
+      const parts = message.body.split('&');
+      const msg = parts[5];
+      const msgType = parts[4];
+      if (parts.length === 7 || parts[0] === 'server') {
+        if (msgType === '0') {
+          const xml = getXmlMessage(msg);
+          if (xml) {
+            const json = xmlToJson(xml);
+            dispatch(addPlaces(normalizePlaces(json.settings.places as any)));
+          }
+        } else if (msgType === '2') {
+          console.debug('message type 2', msg);
+        }
       }
     });
 
     XMPP.connect(`${user}@jabb.im`, password);
   },
-  message: (msg) => {
-    XMPP.message(
-      'client&iseeco61&issecoserver6&00:00:00&0&&client',
-      `iseecoserver6@jabb.im`
-    );
+  message: (msg: string) => {
+    XMPP.message(msg, `${xmpp.server}@jabb.im`);
   },
   disconnect: () => {
     XMPP.disconnect();
     XMPP.removeListeners();
   },
+  getPlaces: () => {
+    const msg = `client&${xmpp.user}&${xmpp.server}&00:00:00&0&&client`;
+    xmpp.message(msg);
+  },
+  getDeviceStatus: (deviceNumber: string) => {
+    const message = `K-S-${deviceNumber}-0-0-48-48-0-0`;
+    const packedMessage = xmpp.packMessage(message, '2');
+    xmpp.message(packedMessage);
+  },
+  packMessage: (message: string, type: string): string => {
+    return `client&${xmpp.user}&${
+      xmpp.server
+    }&00:00:00&${type}&${message}&client`;
+  },
 };
-
-// class XMPPFactory {
-//   ip: string | null = null;
-//   password: string | null = null;
-//   server: string | null = null;
-//   user: string | null = null;
-
-//   setCredential = (ip: string| null, password: string, server: string, user: string) => {
-//     this.ip = ip;
-//     this.password = password;
-//     this.server = server;
-//     this.user = user;
-//   };
-
-//   login = (loginListener) => {
-//     XMPP.on('connect', () => console.debug('CONNECTED!'));
-//     XMPP.on('login', () => loginListener(this.ip, this.password, this.server, this.user));
-//     XMPP.on('loginError', (message) => console.debug(message));
-//     XMPP.on('message', (message) => {
-//       const xml = getXmlMessage(message.body);
-//       if (xml) {
-//         const json = xmlToJson(xml);
-//         console.debug('rsv:' + JSON.stringify(json));
-//       }
-//     });
-
-//     XMPP.connect(`${this.user}@jabb.im`, this.password);
-//   };
-// }
-
-// export XMPPFactory;

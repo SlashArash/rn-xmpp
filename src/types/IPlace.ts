@@ -1,9 +1,7 @@
-import IDevice from './IDevice';
-
 interface IPlace {
   name: string;
   iconNumber: string;
-  devices: IDevice[];
+  devices: string[];
 }
 
 export default IPlace;

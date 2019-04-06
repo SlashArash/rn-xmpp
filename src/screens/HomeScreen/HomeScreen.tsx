@@ -57,11 +57,7 @@ class HomeScreen extends React.Component<IComponentProps, IComponentStates> {
   };
 
   requirePlaces = () => {
-    xmpp.message(
-      `client&${this.props.userName}&${
-        this.props.serverName
-      }&00:00:00&0&&client`
-    );
+    xmpp.getPlaces();
   };
 
   handleSelectStatus = (statusId: number) => () => {
