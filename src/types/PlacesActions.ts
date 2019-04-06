@@ -1,5 +1,5 @@
 import IPlaces from './IPlaces';
-import IDevices from './IDevices';
+import IDevice from './IDevice';
 
 export enum PlacesActionTypes {
   ADD_SEVERAL_PLACES = '@places/ADD_SEVERAL_PLACES',
@@ -9,7 +9,7 @@ export enum PlacesActionTypes {
 export interface IAddSeveralPlaces {
   type: PlacesActionTypes.ADD_SEVERAL_PLACES;
   places: IPlaces;
-  devices: IDevices;
+  devices: IDevice[];
 }
 
 export type PlacesActions = IAddSeveralPlaces;

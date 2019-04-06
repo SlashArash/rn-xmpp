@@ -6,12 +6,14 @@ import xmlToJson from './xmlToJson';
 import { addPlaces } from '../store/places/actions';
 import { normalizePlaces } from './storeUtils';
 import { updateTime } from '../store/app/actions';
+import { updateDevice } from '../store/devices/actions';
 
 interface IXMPP {
   ip: string | null;
   password: string | null;
   server: string | null;
   user: string | null;
+  lastUpdateTime: string | null;
   dispatch: Dispatch | null;
   login: (loginListener: any, dispatch: Dispatch) => void;
   message: (msg: string) => void;
@@ -31,6 +33,7 @@ export const xmpp: IXMPP = {
   password: null,
   server: null,
   user: null,
+  lastUpdateTime: null,
   dispatch: null,
   login: (loginListener, dispatch) => {
     xmpp.dispatch = dispatch;
@@ -42,16 +45,21 @@ export const xmpp: IXMPP = {
       const parts = message.body.split('&');
       const msg = parts[5];
       const msgType = parts[4];
-      const lastUpdateTime = parts[3];
+      xmpp.lastUpdateTime = parts[3];
       if (parts.length === 7 || parts[0] === 'server') {
         if (msgType === '0') {
           const xml = getXmlMessage(msg);
           if (xml) {
             const json = xmlToJson(xml);
             dispatch(addPlaces(normalizePlaces(json.settings.places as any)));
-            dispatch(updateDate(lastUpdateTime));
+            dispatch(updateTime(xmpp.lastUpdateTime));
           }
         } else if (msgType === '2') {
+          const msgParts = msg.split('-');
+          const deviceNumber = msgParts[2];
+          const statusA = Number(msgParts[3]);
+          const statusB = Number(msgParts[4]);
+          dispatch(updateDevice(deviceNumber, statusA, statusB));
           console.debug('message type 2', msg);
         }
       }
@@ -76,8 +84,8 @@ export const xmpp: IXMPP = {
     xmpp.message(packedMessage);
   },
   packMessage: (message: string, type: string): string => {
-    return `client&${xmpp.user}&${
-      xmpp.server
-    }&00:00:00&${type}&${message}&client`;
+    return `client&${xmpp.user}&${xmpp.server}&${
+      xmpp.lastUpdateTime
+    }&${type}&${message}&client`;
   },
 };

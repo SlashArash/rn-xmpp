@@ -23,7 +23,7 @@ export const logout = (userName: string): ILogout => ({
   userName,
 });
 
-export const updateTime = (lastUpdateTime: string): IUpdateTime => ({
+export const updateTime = (lastUpdateTime: string | null): IUpdateTime => ({
   type: AppActionTypes.UPDATE_TIME,
   lastUpdateTime,
 });

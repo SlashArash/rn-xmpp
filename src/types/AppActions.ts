@@ -19,7 +19,7 @@ export interface ILogout {
 
 export interface IUpdateTime {
   type: AppActionTypes.UPDATE_TIME;
-  lastUpdateTime: string;
+  lastUpdateTime: string | null;
 }
 
 export type AppActions = ILogin | ILogout | IUpdateTime;

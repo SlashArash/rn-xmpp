@@ -1,7 +1,12 @@
-import IDevice from '../../types/IDevice';
-import { DevicesActionTypes, IAdd } from '../../types/DevicesActions';
+import { DevicesActionTypes, IUpdateStatus } from '../../types/DevicesActions';
 
-export const updateDevice = (device: IDevice): IAdd => ({
-  type: DevicesActionTypes.ADD,
-  device,
+export const updateDevice = (
+  deviceNumber: string,
+  statusA: number,
+  statusB: number
+): IUpdateStatus => ({
+  type: DevicesActionTypes.UPDATE_STATUS,
+  deviceNumber,
+  statusA,
+  statusB,
 });

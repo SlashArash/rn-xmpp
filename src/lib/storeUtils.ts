@@ -1,7 +1,6 @@
 import IPlaces from '../types/IPlaces';
 import { deviceType } from '../types/types';
 import IDevice from '../types/IDevice';
-import IDevices from '../types/IDevices';
 
 interface IServerDevice {
   '@attributes': {
@@ -25,23 +24,23 @@ interface IServerPlaces {
 
 export const normalizePlaces = (
   serverPlaces: IServerPlaces
-): [IPlaces, IDevices] => {
+): [IPlaces, IDevice[]] => {
   const places: IPlaces = {};
-  let devices: IDevices = {};
+  let devices: IDevice[] = [];
   serverPlaces.place.forEach((place: IServerPlace) => {
     places[place['@attributes'].name] = {
       iconNumber: place['@attributes'].iconnumber,
       name: place['@attributes'].name,
       devices: devicesName(place.placeitem),
     };
-    devices = { ...devices, ...normalizeDevices(place.placeitem) };
+    devices = [...devices, ...normalizeDevices(place.placeitem)];
   });
   return [places, devices];
 };
 
-const normalizeDevices = (serverDevices: IServerDevice[]): IDevices => {
+const normalizeDevices = (serverDevices: IServerDevice[]): IDevice[] => {
   return serverDevices.reduce(
-    (devices: IDevices, serverDevice: IServerDevice) => {
+    (devices: IDevice[], serverDevice: IServerDevice) => {
       const device: IDevice = {
         iconnumber: serverDevice['@attributes'].iconnumber,
         number: serverDevice['@attributes'].number,
@@ -50,19 +49,17 @@ const normalizeDevices = (serverDevices: IServerDevice[]): IDevices => {
         status: serverDevice['@attributes'].status,
         active: false,
       };
-      const deviceId = `${device.number}+${device.status}`;
-      devices[deviceId] = device;
+      devices.push(device);
       return devices;
     },
-    {}
+    []
   );
 };
 
 const devicesName = (serverDevices: IServerDevice[]): string[] => {
-  return serverDevices.map(
-    (serverDevice: IServerDevice) =>
-      `${serverDevice['@attributes'].number}+${
-        serverDevice['@attributes'].status
-      }`
+  const deviceSet = new Set();
+  serverDevices.forEach((serverDevice: IServerDevice) =>
+    deviceSet.add(serverDevice['@attributes'].number)
   );
+  return [...deviceSet];
 };

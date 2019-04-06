@@ -21,7 +21,7 @@ const DeviceList: StatelessComponent<IComponentProps> = ({ devices }) => (
       }}
     >
       {devices.map((device) => (
-        <DeviceCard key={device.name} device={device} />
+        <DeviceCard key={`${device.number}+${device.name}`} device={device} />
       ))}
     </View>
   </View>

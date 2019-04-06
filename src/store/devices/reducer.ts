@@ -14,13 +14,15 @@ const DevicesReducer = (
     switch (action.type) {
       case PlacesActionTypes.ADD_SEVERAL_PLACES:
         Object.values(action.devices).forEach((device) => {
-          const deviceId = `${device.number}+${device.status}`;
-          draft[deviceId] = device;
+          draft[device.number] = {
+            ...draft[device.number],
+            [device.status]: device,
+          };
         });
         break;
-      case DevicesActionTypes.ADD:
-        const deviceId = `${action.device.number}+${action.device.status}`;
-        draft[deviceId] = action.device;
+      case DevicesActionTypes.UPDATE_STATUS:
+        draft[action.deviceNumber]['A'].active = action.statusA === 1;
+        draft[action.deviceNumber]['B'].active = action.statusB === 1;
         break;
     }
   });

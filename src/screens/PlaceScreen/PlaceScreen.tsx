@@ -9,6 +9,7 @@ import IDevices from '../../types/IDevices';
 
 import DeviceList from '../../components/DeviceList';
 import { xmpp } from '../../lib/XMPP';
+import IDevice from '../../types/IDevice';
 
 interface IOwnProps {
   navigation: NavigationScreenProp<NavigationRoute>;
@@ -38,7 +39,13 @@ class PlaceScreen extends React.PureComponent<IComponentProps> {
 
   render() {
     const devicesId = this.props.place ? this.props.place.devices : [];
-    const devices = devicesId.map((deviceId) => this.props.devices[deviceId]);
+    const devices = devicesId.reduce((list: IDevice[], deviceId: string) => {
+      const mainDevice = this.props.devices[deviceId];
+      Object.values(mainDevice).forEach((subDevice) => {
+        list.push(subDevice);
+      });
+      return list;
+    }, []);
     return (
       <ScrollView>
         <DeviceList devices={devices} />

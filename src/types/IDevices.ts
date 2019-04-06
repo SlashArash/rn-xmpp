@@ -1,7 +1,7 @@
 import IDevice from './IDevice';
 
 interface IDevices {
-  [deviceID: string]: IDevice;
+  [deviceNumber: string]: { [status: string]: IDevice };
 }
 
 export default IDevices;
