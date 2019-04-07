@@ -15,10 +15,26 @@ const Cooling: React.StatelessComponent<IComponentProps> = ({ speed }) => (
   <View style={styles.wrapper}>
     <TouchableOpacity style={styles.icon}>
       <View style={styles.speedWrapper}>
-        <View style={[styles.quarter, styles.topLeft]} />
-        <View style={[styles.quarter, styles.topRight]} />
-        <View style={[styles.quarter, styles.bottomLeft]} />
-        <View style={[styles.quarter, styles.bottomRight]} />
+        <View
+          style={[styles.quarter, styles.topLeft, speed >= 4 && styles.active]}
+        />
+        <View
+          style={[styles.quarter, styles.topRight, speed >= 1 && styles.active]}
+        />
+        <View
+          style={[
+            styles.quarter,
+            styles.bottomLeft,
+            speed >= 3 && styles.active,
+          ]}
+        />
+        <View
+          style={[
+            styles.quarter,
+            styles.bottomRight,
+            speed >= 2 && styles.active,
+          ]}
+        />
       </View>
       <View style={styles.fillCircle} />
       <Image source={fan} style={styles.image} />
