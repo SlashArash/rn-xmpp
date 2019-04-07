@@ -4,17 +4,19 @@ import {
   createBottomTabNavigator,
 } from 'react-navigation';
 
+import { colors } from '../constants/Theme';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import SignInScreen from '../screens/SignInScreen';
 import PlaceScreen from '../screens/PlaceScreen';
-import { colors } from '../constants/Theme';
+import DeviceConfigScreen from '../screens/DeviceConfigScreen';
 
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
     Place: PlaceScreen,
+    DeviceConfig: DeviceConfigScreen,
   },
   {
     initialRouteName: 'Home',

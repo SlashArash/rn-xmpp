@@ -9,7 +9,7 @@ import StyledText from '../StyledText';
 
 interface IComponentProps {
   device: IDevice;
-  onChangeDeviceState: (device: IDevice) => () => void;
+  onPressOnDevice: (device: IDevice) => void;
 }
 
 const requireIcon = (device: IDevice) => {
@@ -29,22 +29,29 @@ const requireIcon = (device: IDevice) => {
   return icon;
 };
 
-const DeviceCard: React.StatelessComponent<IComponentProps> = ({
-  device,
-  onChangeDeviceState,
-}) => {
-  const icon = requireIcon(device);
-  return (
-    <TouchableOpacity
-      style={[styles.card]}
-      onPress={onChangeDeviceState(device)}
-    >
-      <View style={styles.cardBody}>
-        <Image source={icon} style={styles.icon} />
-        <StyledText>{device.name}</StyledText>
+class DeviceCard extends React.PureComponent<IComponentProps> {
+  handlePressOnCard = () => {
+    this.props.onPressOnDevice(this.props.device);
+  };
+
+  render() {
+    const { device } = this.props;
+    const icon = requireIcon(device);
+
+    return (
+      <View>
+        <TouchableOpacity
+          style={[styles.card]}
+          onPress={this.handlePressOnCard}
+        >
+          <View style={styles.cardBody}>
+            <Image source={icon} style={styles.icon} />
+            <StyledText>{device.name}</StyledText>
+          </View>
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
-  );
-};
+    );
+  }
+}
 
 export default DeviceCard;

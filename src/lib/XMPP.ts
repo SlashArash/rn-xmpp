@@ -8,8 +8,6 @@ import { addPlaces } from '../store/places/actions';
 import getXmlMessage from './getXmlMessage';
 import xmlToJson from './xmlToJson';
 import { normalizePlaces } from './storeUtils';
-import mapDeviceType from './mapDeviceType';
-import { changeLampState } from './deviceUtils';
 
 interface IXMPP {
   ip: string | null;
@@ -24,7 +22,7 @@ interface IXMPP {
   getPlaces: () => void;
   getDeviceStatus: (deviceNumber: string) => void;
   packMessage: (message: string, type: string) => string;
-  updateDeviceStatus: (device: IDevice) => void;
+  updateDeviceStatus: (msg: string) => void;
 }
 
 XMPP.trustHosts(['jabb.im']);
@@ -93,19 +91,8 @@ export const xmpp: IXMPP = {
       xmpp.lastUpdateTime
     }&${type}&${message}&client`;
   },
-  updateDeviceStatus: (device: IDevice) => {
-    const deviceType = mapDeviceType(device.type);
-    let message;
-    if (deviceType === 'lamp') {
-      const msg = changeLampState(device);
-      message = xmpp.packMessage(msg, '2');
-    } else if (deviceType === 'thermostat') {
-      console.debug('change thermostat state');
-    } else if (deviceType === 'curtain') {
-      console.debug('change curtain state');
-    }
-    if (message) {
-      xmpp.message(message);
-    }
+  updateDeviceStatus: (msg: string) => {
+    const message = xmpp.packMessage(msg, '2');
+    xmpp.message(message);
   },
 };

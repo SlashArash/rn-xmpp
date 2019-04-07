@@ -1,6 +1,8 @@
 export default {
   activeSensors: 'دستگاه‌های فعال',
+  config: 'پیکربندی',
   device: 'دستگاه',
+  devices: 'دستگاه‌ها',
   home: 'خانه',
   ipOfLocalServer: 'آی‌پی سرور محلی',
   normal: 'عادی',
@@ -30,5 +32,4 @@ export default {
   travel: 'سفر',
   userName: 'نام کاربری',
   without: 'بدون',
-  devices: 'وسائل',
 };

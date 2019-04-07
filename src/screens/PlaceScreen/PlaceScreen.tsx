@@ -10,6 +10,8 @@ import IDevices from '../../types/IDevices';
 import DeviceList from '../../components/DeviceList';
 import { xmpp } from '../../lib/XMPP';
 import IDevice from '../../types/IDevice';
+import mapDeviceType from '../../lib/mapDeviceType';
+import { changeLampState } from '../../lib/deviceUtils';
 
 interface IOwnProps {
   navigation: NavigationScreenProp<NavigationRoute>;
@@ -37,8 +39,14 @@ class PlaceScreen extends React.PureComponent<IComponentProps> {
     });
   }
 
-  handleChangeDeviceState = (device: IDevice) => () => {
-    xmpp.updateDeviceStatus(device);
+  handlePressOnDevice = (device: IDevice) => {
+    const deviceType = mapDeviceType(device.type);
+    if (deviceType === 'lamp') {
+      const message = changeLampState(device);
+      xmpp.updateDeviceStatus(message);
+    } else if (deviceType === 'thermostat') {
+      this.props.navigation.navigate('DeviceConfig', { device });
+    }
   };
 
   render() {
@@ -54,7 +62,7 @@ class PlaceScreen extends React.PureComponent<IComponentProps> {
       <ScrollView>
         <DeviceList
           devices={devices}
-          onChangeDeviceState={this.handleChangeDeviceState}
+          onPressOnDevice={this.handlePressOnDevice}
         />
       </ScrollView>
     );
