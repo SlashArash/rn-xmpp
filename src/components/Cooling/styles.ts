@@ -1,4 +1,4 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { colors } from '../../constants/Theme';
 
@@ -9,22 +9,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 50,
+    borderRadius: 35,
     borderWidth: 1,
     borderColor: colors.smoke,
     padding: 10,
   },
   image: {
-    width: 40,
-    height: 40,
+    width: 35,
+    height: 35,
   },
   legendText: {
     color: colors.black,
-    fontSize: 20,
+    fontSize: 18,
   },
 });
 
