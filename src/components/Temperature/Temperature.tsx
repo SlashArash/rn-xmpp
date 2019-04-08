@@ -6,16 +6,16 @@ import StyledText from '../StyledText';
 
 interface IComponentProps {
   value: number;
-  onChangeValue: (number) => void;
+  onChange: (number) => void;
 }
 
 class Temperature extends React.PureComponent<IComponentProps> {
   handleChangeValue = (type: 'decrease' | 'increase') => () => {
     const { value } = this.props;
     if (type === 'decrease') {
-      this.props.onChangeValue(value - 1);
+      this.props.onChange(value - 1);
     } else if (type === 'increase') {
-      this.props.onChangeValue(value + 1);
+      this.props.onChange(value + 1);
     }
   };
 

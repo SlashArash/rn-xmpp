@@ -1,7 +1,6 @@
 import XMPP from 'react-native-xmpp';
 import { Dispatch } from 'redux';
 
-import IDevice from '../types/IDevice';
 import { updateTime } from '../store/app/actions';
 import { updateDevice } from '../store/devices/actions';
 import { addPlaces } from '../store/places/actions';
@@ -59,12 +58,18 @@ export const xmpp: IXMPP = {
         } else if (msgType === '2') {
           const msgParts = msg.split('-');
           const deviceNumber = msgParts[2];
-          const statusA = Number(msgParts[3]);
-          const statusB = Number(msgParts[4]);
-          dispatch(updateDevice(deviceNumber, statusA, statusB));
-
-          console.debug(msg);
+          dispatch(
+            updateDevice(
+              deviceNumber,
+              msgParts[3],
+              msgParts[4],
+              msgParts[5],
+              msgParts[6],
+              msgParts[7]
+            )
+          );
         }
+        console.debug(msg);
       }
     });
 

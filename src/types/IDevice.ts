@@ -4,9 +4,12 @@ interface IDevice {
   number: string;
   name: string;
   type: deviceType;
-  active: boolean;
   status: 'A' | 'B';
   iconnumber: string;
+  active: 'on' | 'off' | 'auto';
+  fanSpeed?: number;
+  cooling?: boolean;
+  temperature?: number;
 }
 
 export default IDevice;

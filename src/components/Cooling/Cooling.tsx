@@ -10,19 +10,32 @@ const snowActive = require('../../../assets/images/icons/snow-active.png');
 
 interface IComponentProps {
   active: boolean;
+  onChange: (value: boolean) => void;
 }
 
-const Cooling: React.StatelessComponent<IComponentProps> = ({ active }) => (
-  <View style={styles.wrapper}>
-    <TouchableOpacity style={styles.icon}>
-      {active ? (
-        <Image source={snowActive} style={styles.image} />
-      ) : (
-        <Image source={snow} style={styles.image} />
-      )}
-    </TouchableOpacity>
-    <StyledText style={styles.legendText}>{messages.cooling}</StyledText>
-  </View>
-);
+class Cooling extends React.PureComponent<IComponentProps> {
+  handleChangeCooling = () => {
+    this.props.onChange(!this.props.active);
+  };
+
+  render() {
+    const { active } = this.props;
+    return (
+      <View style={styles.wrapper}>
+        <TouchableOpacity
+          style={styles.icon}
+          onPress={this.handleChangeCooling}
+        >
+          {active ? (
+            <Image source={snowActive} style={styles.image} />
+          ) : (
+            <Image source={snow} style={styles.image} />
+          )}
+        </TouchableOpacity>
+        <StyledText style={styles.legendText}>{messages.cooling}</StyledText>
+      </View>
+    );
+  }
+}
 
 export default Cooling;

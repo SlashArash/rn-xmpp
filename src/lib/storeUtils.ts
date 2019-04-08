@@ -31,9 +31,12 @@ export const normalizePlaces = (
     places[place['@attributes'].name] = {
       iconNumber: place['@attributes'].iconnumber,
       name: place['@attributes'].name,
-      devices: devicesName(place.placeitem),
+      devices: [],
     };
-    devices = [...devices, ...normalizeDevices(place.placeitem)];
+    if (place.placeitem) {
+      places[place['@attributes'].name].devices = devicesName(place.placeitem);
+      devices = [...devices, ...normalizeDevices(place.placeitem)];
+    }
   });
   return [places, devices];
 };
@@ -47,7 +50,7 @@ const normalizeDevices = (serverDevices: IServerDevice[]): IDevice[] => {
         name: serverDevice['@attributes'].name,
         type: serverDevice['@attributes'].type,
         status: serverDevice['@attributes'].status,
-        active: false,
+        active: 'off',
       };
       devices.push(device);
       return devices;

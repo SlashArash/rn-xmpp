@@ -26,11 +26,11 @@ class DeviceCard extends React.PureComponent<IComponentProps> {
 
   getIcon = (device: IDevice) => {
     const deviceType = mapDeviceType(device.type);
-    let icon = device.active ? bulbActive : bulb;
+    let icon = device.active === 'on' ? bulbActive : bulb;
     if (deviceType === 'curtain') {
-      icon = device.active ? windowActive : window;
+      icon = device.active === 'on' ? windowActive : window;
     } else if (deviceType === 'thermostat') {
-      icon = device.active ? airConditionerActive : airConditioner;
+      icon = device.active === 'on' ? airConditionerActive : airConditioner;
     }
     return icon;
   };
